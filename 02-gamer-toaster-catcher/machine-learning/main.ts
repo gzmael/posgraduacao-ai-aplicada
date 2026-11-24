@@ -26,7 +26,7 @@ interface PredictionBox {
 }
 
 // Ducks move too far for predictions from older frames to land a hit.
-const MAX_FRAME_AGE_MS = 300;
+// const MAX_FRAME_AGE_MS = 300;
 
 // Absolute timestamp, comparable with the worker's (performance.now() alone has a per-thread origin)
 const now = () => performance.timeOrigin + performance.now();
@@ -115,18 +115,18 @@ export function main(app: Application): ModelSession {
         if (type === 'prediction') {
             if (paused) return;
             const { enableAiShot, enableBoxes, enableDebug } = getSettings();
-            if (enableDebug) console.log(`🎯 AI predicted at: (${x}, ${y}) ${width}x${height}`);
             const receivedAt = now();
-
+            
             if (![x, y, width, height].every((value) => typeof value === 'number')) return;
+            if (enableDebug) console.log(`🎯 AI predicted at: (${x}, ${y}) ${width}x${height}`);
 
-            const frameAgeMs = receivedAt - timing.capturedAt;
-            if (frameAgeMs > MAX_FRAME_AGE_MS) {
-                if (enableDebug) {
-                    console.debug(`⏭️ Skipped stale prediction at: (${x}, ${y}), frame is ${frameAgeMs.toFixed(1)}ms old`);
-                }
-                return;
-            }
+            // const frameAgeMs = receivedAt - timing.capturedAt;
+            // if (frameAgeMs > MAX_FRAME_AGE_MS) {
+            //     if (enableDebug) {
+            //         console.debug(`⏭️ Skipped stale prediction at: (${x}, ${y}), frame is ${frameAgeMs.toFixed(1)}ms old`);
+            //     }
+            //     return;
+            // }
 
             if (enableAiShot) {
                 const { toast, toastsShotBefore } = findShotTarget(app, x, y);
